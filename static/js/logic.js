@@ -17,11 +17,11 @@ function markerSize(magnitude) {
 
 // Function for marker color based on the depth of the earthquake
 function chooseColor(depth) {
-    if (depth < 10) return "green";
-    else if (depth < 30) return "greenyellow";
-    else if (depth < 50) return "yellow";
+    if (depth < 10) return "lawngreen";
+    else if (depth < 30) return "yellow";
+    else if (depth < 50) return "gold";
     else if (depth < 70) return "orange";
-    else if (depth < 90) return "orangered";
+    else if (depth < 90) return "darkorange";
     else if (depth >= 90) return "red";
 }
 
@@ -40,7 +40,7 @@ function createFeatures(earthquakeData) {
             var markers = {
                 radius: markerSize(feature.properties.mag),
                 fillColor: chooseColor(feature.geometry.coordinates[2]),
-                fillOpacity: 0.7,
+                fillOpacity: 1,
                 color: "black",
                 stroke: true,
                 weight: 0.5
@@ -70,25 +70,32 @@ function createMap(earthquakes) {
   // Add legend
   var legend = L.control({ position: "bottomright" });
   legend.onAdd = function () {
-      var div = L.DomUtil.create("div", "info legend"),
-          depth = [-10, 10, 30, 50, 70, 90],
-          colors = ["green", "greenyellow", "yellow", "orange", "orangered", "red"];
+    var div = L.DomUtil.create("div", "info legend"),
+        depth = [-10, 10, 30, 50, 70, 90],
+        colors = ["lawngreen", "yellow", "gold", "orange", "darkorange", "red"];
 
-      div.innerHTML += "<h3 style='text-align: center'>Depth</h3>";
+    div.innerHTML += "<h3 style='text-align: center'>Depth</h3>";
 
-      for (var i = 0; i < depth.length; i++) {
-          div.innerHTML +=
-              '<div><i style="background:' + colors[i] + '"></i> ' +
-              depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] : '+') + '</div>';
-      }
-      return div;
-  };
+    for (var i = 0; i < depth.length; i++) {
+        div.innerHTML +=
+            '<div><i style="background:' + colors[i] + '"></i> ' +
+            depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] : '+') + '</div>';
+    }
+
+    // Set height and width for the colored boxes in the legend
+    var legendColors = div.querySelectorAll("i");
+    legendColors.forEach(function (color) {
+        color.style.width = "20px";
+        color.style.height = "20px";
+        color.style.display = "inline-block";
+        color.style.marginRight = "5px"; 
+    });
+
+    return div;
+};
+
   legend.addTo(myMap);
 
-  // Add the layer control to the map.
-  L.control.layers(street, earthquakes, {
-    collapsed: false
-  }).addTo(myMap);
 
 }
 
