@@ -1,3 +1,7 @@
+
+# Link to page visualization was deployed to
+https://jeneengnilka.github.io/leaflet-challenge/
+
 # Create the Earthquake Visualization
 
 Downloaded starter files
